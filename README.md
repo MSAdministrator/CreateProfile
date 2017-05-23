@@ -10,3 +10,10 @@ A PowerShell module that will create a new local user account and map it to a SI
 
 ## DETAILED DESCRIPTION
 A PowerShell module that will create a new local user account and map it to a SID.  After that it will auto-login/create the user profile so that the user's profile is now mapped before they have even logged into a machine.
+
+## Example
+
+```
+> Import-Module .\CreateProfile\CreateProfile.psm1
+> New-Profile -UserName 'Josh Thom' -Password 'P@ssw0rd123'
+```
