@@ -4,9 +4,9 @@
 .DESCRIPTION
    This function will create a new local user and then map it to a user profile based on a SID.  After that it will load the user profile.
 .EXAMPLE
-   Create-NewProfile -UserName 'someusername' -password 'Password'
+   New-Profile -UserName 'someusername' -password 'Password'
 #>
-function Create-NewProfile {
+function New-Profile {
  
     [CmdletBinding()]
     [Alias()]
