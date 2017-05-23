@@ -32,7 +32,7 @@ Describe "$module PowerShell Module Tests" {
 
 
 
-    $pubFunctions = ('Create-NewProfile',                    
+    $pubFunctions = ('New-Profile',                    
                      'New-LocalUser'
                     )
 
