@@ -1,3 +1,4 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/0tuhgefw1g1u6umw?svg=true)](https://ci.appveyor.com/project/MSAdministrator/createprofile)
 # CreateProfile
 PowerShell Module that uses WINAPI to create system profiles
 
