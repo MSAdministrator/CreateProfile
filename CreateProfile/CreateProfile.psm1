@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ﻿#requires -Version 2
 
   <#
@@ -12,6 +13,12 @@
 
 #Get public and private function definition files.
 $Public  = @( Get-ChildItem -Path $PSScriptRoot\Public\*.ps1 -Recurse -ErrorAction SilentlyContinue )
+=======
+﻿
+#requires -Version 2
+#Get public and private function definition files.
+$Public  = @( Get-ChildItem -Path $PSScriptRoot\Public\*.ps1 -Recurse -ErrorAction SilentlyContinue  )
+>>>>>>> fb704c864af24cdab64a7f52ecd204394456a1e2
 $Private = @( Get-ChildItem -Path $PSScriptRoot\Private\*.ps1 -Recurse -ErrorAction SilentlyContinue )
 
 #Dot source the files
