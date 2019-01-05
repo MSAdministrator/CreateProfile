@@ -1,37 +1,17 @@
-<<<<<<< HEAD
-﻿#requires -Version 2
-
-  <#
-  .SYNOPSIS
-    Loads all functions into memory
-  .DESCRIPTION
-    Loads all functions into memory and only exports the public functions for use
-  .NOTES
-    Author: Josh Rickard & Thom Schumacher
-    CreateDate: 04/01/2017 14:59:31
-  #>
-
-#Get public and private function definition files.
-$Public  = @( Get-ChildItem -Path $PSScriptRoot\Public\*.ps1 -Recurse -ErrorAction SilentlyContinue )
-=======
-﻿
-#requires -Version 2
-#Get public and private function definition files.
-$Public  = @( Get-ChildItem -Path $PSScriptRoot\Public\*.ps1 -Recurse -ErrorAction SilentlyContinue  )
->>>>>>> fb704c864af24cdab64a7f52ecd204394456a1e2
-$Private = @( Get-ChildItem -Path $PSScriptRoot\Private\*.ps1 -Recurse -ErrorAction SilentlyContinue )
-
-#Dot source the files
-Foreach($import in @($Public + $Private))
+$functionFolders = @('Public', 'Private', 'Classes')
+ForEach ($folder in $functionFolders)
 {
-    Try
+    $folderPath = Join-Path -Path $PSScriptRoot -ChildPath $folder
+    If (Test-Path -Path $folderPath)
     {
-        . $import.fullname
-    }
-    Catch
-    {
-        Write-Error -Message "Failed to import function $($import.fullname): $_"
-    }
+        Write-Verbose -Message "Importing from $folder"
+        $functions = Get-ChildItem -Path $folderPath -Filter '*.ps1' 
+        ForEach ($function in $functions)
+        {
+            Write-Verbose -Message "  Importing $($function.BaseName)"
+            . $($function.FullName)
+        }
+    }    
 }
-
-Export-ModuleMember -Function $Public.Basename
+$publicFunctions = (Get-ChildItem -Path "$PSScriptRoot\Public" -Filter '*.ps1').BaseName
+Export-ModuleMember -Function $publicFunctions
