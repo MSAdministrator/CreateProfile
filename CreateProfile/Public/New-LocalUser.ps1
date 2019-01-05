@@ -1,171 +1,86 @@
 ﻿<#
-.Synopsis
-<<<<<<< HEAD
-   Short description
-.DESCRIPTION
-   Long description
-.EXAMPLE
-   Example of how to use this cmdlet
-.EXAMPLE
-   Another example of how to use this cmdlet
-.INPUTS
-   Inputs to this cmdlet (if any)
-.OUTPUTS
-   Output from this cmdlet (if any)
-.NOTES
-   General notes
-.COMPONENT
-   The component this cmdlet belongs to
-.ROLE
-   The role this cmdlet belongs to
-.FUNCTIONALITY
-   The functionality that best describes this cmdlet
+    .Synopsis
+    Create a new Local User
+    .DESCRIPTION
+    Create a new Local User with password set to never expire
+    .PARAMETER UserName
+    This is the UserName of the User to be created
+    .PARAMETER Password
+    This is the Password of the User to be created
+    .PARAMETER Whatif
+     WhatIF
+    .PARAMETER Confirm
+     Confirm Action
+    .EXAMPLE
+    New-LocalUser -UserName "MyUSer" -Password "MySecurePassword"
+
 #>
 function New-LocalUser
 {
-    [CmdletBinding(DefaultParameterSetName='Parameter Set 1', 
-                  SupportsShouldProcess=$true, 
-                  PositionalBinding=$false,
-                  HelpUri = 'http://www.microsoft.com/',
-                  ConfirmImpact='Medium')]
-    [Alias()]
-    [OutputType([String])]
-    Param
-    (
-        # Username of the new local user account you want to create
-        [Parameter(Mandatory=$true, 
-                   ValueFromPipeline=$true,
-                   ValueFromPipelineByPropertyName=$true, 
-                   ValueFromRemainingArguments=$false, 
-                   Position=0)]
-        [ValidateNotNull()]
-        [ValidateNotNullOrEmpty()]
-        [Alias("name")] 
-        [string]$UserName,
+  [CmdletBinding(DefaultParameterSetName = 'Parameter Set 1',
+      SupportsShouldProcess = $true,
+      PositionalBinding = $false,
+      HelpUri = 'http://www.microsoft.com/',
+  ConfirmImpact = 'Medium')]
+  [Alias()]
+  [OutputType([String])]
+  Param
+  (
+    # Username of the new local user account you want to create
+    [Parameter(Mandatory = $true,
+        ValueFromPipeline = $true,
+        ValueFromPipelineByPropertyName = $true,
+        ValueFromRemainingArguments = $false,
+    Position = 0)]
+    [ValidateNotNull()]
+    [ValidateNotNullOrEmpty()]
+    [Alias('name')]
+    [string]$UserName,
 
-        # Param2 help description
-        [Parameter(Mandatory=$true, 
-                   ValueFromPipeline=$true,
-                   ValueFromPipelineByPropertyName=$true, 
-                   ValueFromRemainingArguments=$false, 
-                   Position=1)]
-        [ValidateNotNull()]
-        [ValidateNotNullOrEmpty()]
-        [string]
-        $Password
-    )
+    # Param2 help description
+    [Parameter(Mandatory = $true,
+        ValueFromPipeline = $true,
+        ValueFromPipelineByPropertyName = $true,
+        ValueFromRemainingArguments = $false,
+    Position = 1)]
+    [ValidateNotNull()]
+    [ValidateNotNullOrEmpty()]
+    [string]
+    $Password
+  )
 
-    Begin
-    {
-        # intentionally left blank
-    }
-    Process
-    {
-        if ($pscmdlet.ShouldProcess("$UserName on $env:COMPUTERNAME", "Creating Local User"))
-        {
-            try
-            {
-                $system = [ADSI]"WinNT://$env:COMPUTERNAME";
-                $user = $system.Create("user",$UserName);
-                $user.SetPassword($Password);
-                $user.SetInfo();
- 
-                $flag=$user.UserFlags.value -bor 0x10000;
-                $user.put("userflags",$flag);
-                $user.SetInfo();
- 
-                $group = [ADSI]("WinNT://$env:COMPUTERNAME/Users");
-                $group.PSBase.Invoke("Add", $user.PSBase.Path);
-            }
-            catch
-            {
-                Write-Warning
-            }
-        }
-    }
-    End
-    {
-        # intentionally left blank
-    }
-}
-
-
-#Function to create the new local user first
-function New-LocalUser
-{
-    [CmdletBinding()]
-    [Alias()]
-    [OutputType([int])]
-    Param
-    (
-        # Param1 help description
-        [Parameter(Mandatory=$true,
-                   ValueFromPipelineByPropertyName=$true,
-                   Position=0)]
-        $userName,
-        # Param2 help description
-        [string]
-        $password
-    )
- 
-    $system = [ADSI]"WinNT://$env:COMPUTERNAME";
-    $user = $system.Create("user",$userName);
-    $user.SetPassword($password);
-    $user.SetInfo();
- 
-    $flag=$user.UserFlags.value -bor 0x10000;
-    $user.put("userflags",$flag);
-    $user.SetInfo();
- 
-    $group = [ADSI]("WinNT://$env:COMPUTERNAME/Users");
-    $group.PSBase.Invoke("Add", $user.PSBase.Path);
-=======
-   this function will create a new local user account
-.DESCRIPTION
-   This function will create a new local user account on the local system.
-.EXAMPLE
-   New-LocalUser -UserName 'SomeUserName' -Password 'Password'
-#>
-function New-LocalUser
-{
-    [CmdletBinding()]
-    [Alias()]
-    [OutputType([int])]
-    Param
-    (
-        # Param1 help description
-        [Parameter(Mandatory=$true,
-                   ValueFromPipelineByPropertyName=$true,
-                   Position=0)]
-        $UserName,
-
-        # Param2 help description
-        [Parameter(Mandatory=$true,
-                   ValueFromPipelineByPropertyName=$true,
-                   Position=1)]
-        [string]
-        $Password
-    )
-        
+  Begin
+  {
+    # intentionally left blank
+  }
+  Process
+  {
     Write-Verbose -Message 'Attempting to create a new local user account'
+    if ($pscmdlet.ShouldProcess("$UserName on $env:COMPUTERNAME", 'Creating Local User'))
+    {
+      try
+      {
+        $system = [ADSI]"WinNT://$env:COMPUTERNAME"
+        $user = $system.Create('user',$UserName)
+        $user.SetPassword($Password)
+        $user.SetInfo()
 
-    try
-    {
-        $system = [ADSI]"WinNT://$env:COMPUTERNAME";
-        $user = $system.Create("user",$userName);
-        $user.SetPassword($password);
-        $user.SetInfo();
- 
-        $flag=$user.UserFlags.value -bor 0x10000;
-        $user.put("userflags",$flag);
-        $user.SetInfo();
- 
-        $group = [ADSI]("WinNT://$env:COMPUTERNAME/Users");
-        $group.PSBase.Invoke("Add", $user.PSBase.Path);
-    }
-    catch
-    {
+        $flag = $user.UserFlags.value -bor 0x10000
+        $user.put('userflags',$flag)
+        $user.SetInfo()
+
+        $group = [ADSI]("WinNT://$env:COMPUTERNAME/Users")
+        $group.PSBase.Invoke('Add', $user.PSBase.Path)
+      }
+      catch
+      {
         Write-Error -Message 'Error attempting to create new local user' -Exception $error[0]
+      }
     }
->>>>>>> fb704c864af24cdab64a7f52ecd204394456a1e2
+  }
+  End
+  {
+    # intentionally left blank
+  }
 }
+
